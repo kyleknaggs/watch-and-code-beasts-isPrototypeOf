@@ -23,7 +23,11 @@
 
     var typeOfPossibleDescendant = Object.prototype.toString.call(possibleDescendant);
 
-    if(typeOfPossibleDescendant === "[object Object]" || typeOfPossibleDescendant === "[object Array]"){
+    if(
+      typeOfPossibleDescendant === "[object Object]" ||
+      typeOfPossibleDescendant === "[object Array]" ||
+      typeOfPossibleDescendant === "[object Function]"
+    ){
       var prototype = Object.getPrototypeOf(possibleDescendant);
 
       // Base case 1: If object is on prototype chain
@@ -87,14 +91,19 @@
       var isObjectPrototype = isPrototypeOf(Object.prototype, []);
       eq(isObjectPrototype, true);
     },
-    "8) If object is Object.prototype and possibleDescendant is null or undefined it should return false.": function () {
+    "8) If object is Object.prototype, and descendent is function it should return true.": function () {
+      var functionExpression = function(){};
+      var isObjectPrototype = isPrototypeOf(Object.prototype, functionExpression);
+      eq(isObjectPrototype, true);
+    },
+    "9) If object is Object.prototype and possibleDescendant is null or undefined it should return false.": function () {
       var isObjectPrototypeOfNull = isPrototypeOf(Object.prototype, null);
       eq(isObjectPrototypeOfNull, false);
 
       var isObjectPrototypeOfUndefined = isPrototypeOf(Object.prototype, undefined);
       eq(isObjectPrototypeOfUndefined, false);
     },
-    "9) If object is Object.prototype and possibleDescendant is string, number, or boolean, it should return false.": function () {
+    "10) If object is Object.prototype and possibleDescendant is string, number, or boolean, it should return false.": function () {
       var isObjectPrototypeOfString = isPrototypeOf(Object.prototype, 'string');
       eq(isObjectPrototypeOfString, false);
 
