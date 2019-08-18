@@ -20,22 +20,18 @@
 
   // Function Syntax:
   function isPrototypeOf(ancestor,descendant) {
-    // If descendant is present:
-    if(arguments.length > 1){
 
-      try{
-        var prototype = Object.getPrototypeOf(descendant);
-      }catch(e){
-        // Base case 1: If descendant is null or undefined
-        return false;
-      }
+    var typeOfDescendant = Object.prototype.toString.call(descendant);
 
-      // Base case 2: If ancestor is on prototype chain
+    if(typeOfDescendant === "[object Object]" || typeOfDescendant === "[object Array]"){
+      var prototype = Object.getPrototypeOf(descendant);
+
+      // Base case 1: If ancestor is on prototype chain
       if (ancestor === prototype) {
         return true;
       }
 
-      // Base case 3: If search has reached end of prototype chain
+      // Base case 2: If search has reached end of prototype chain
       if (prototype === null) {
         return false;
       }
@@ -43,6 +39,7 @@
       // Recursive case: Keep searching up prototype chain
       var isAncestorPrototype = isPrototypeOf(ancestor, prototype);
       return isAncestorPrototype;
+
     }
 
     return false
@@ -113,15 +110,14 @@
       eq(isObjectPrototypeOfUndefined, false);
     },
     "9) If ancestor is Object.prototype and descendant is string, number, or boolean, it should return false.": function () {
-      fail();
-      // var isObjectPrototypeOfString = isPrototypeOf(Object.prototype, 'string');
-      // eq(isObjectPrototypeOfString, false);
+      var isObjectPrototypeOfString = isPrototypeOf(Object.prototype, 'string');
+      eq(isObjectPrototypeOfString, false);
 
-      // var isObjectPrototypeOfNumber = isPrototypeOf(Object.prototype, 1);
-      // eq(isObjectPrototypeOfNumber, false);
+      var isObjectPrototypeOfNumber = isPrototypeOf(Object.prototype, 1);
+      eq(isObjectPrototypeOfNumber, false);
 
-      // var isObjectPrototypeOfBoolean = isPrototypeOf(Object.prototype, true);
-      // eq(isObjectPrototypeOfBoolean, false);
+      var isObjectPrototypeOfBoolean = isPrototypeOf(Object.prototype, true);
+      eq(isObjectPrototypeOfBoolean, false);
     }
   });
 </script>
