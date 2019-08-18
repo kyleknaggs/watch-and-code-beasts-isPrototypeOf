@@ -45,46 +45,37 @@
     return false
   }
 
+  // Set up variables for test cases
+  // 1) Canine prototype chain
+  var canine = {
+    sound: 'bark'
+  };
+  var dog = Object.create(canine);
+  dog.domesticated = true;
+  var myDog = Object.create(dog);
+  myDog.name = 'Shylah';
+
+  // 2) Empty prototype chain
+  var empty = Object.create(null);
+
   tests({
     "1) If no possibleDescendant, it should return false.": function () {
       var isPrototype = isPrototypeOf(Object.prototype);
       eq(isPrototype, false)
     },
     "2) If object is the prototype of possibleDescendant, it should return true.": function () {
-      var canine = {};
-      var dog = Object.create(canine);
       var isCaninePrototype = isPrototypeOf(canine, dog);
       eq(isCaninePrototype, true);
     },
     "3) If object is not the prototype of possibleDescendant, it should return false.": function () {
-      var canine = {
-        sound: 'bark'
-      };
-      var empty = Object.create(null);
-      var dog = Object.create(canine);
       var isDogPrototype = isPrototypeOf(dog, empty);
       eq(isDogPrototype, false);
     },
     "4) If object is part of possibleDescendant's prototype chain, it should return true.": function () {
-      var canine = {
-        sound: 'bark'
-      };
-      var dog = Object.create(canine);
-      dog.domesticated = true;
-      var myDog = Object.create(dog);
-      myDog.name = 'Shylah';
       var isCaninePrototype = isPrototypeOf(canine, myDog);
       eq(isCaninePrototype, true);
     },
     "5) If object is not part of possibleDescendant's prototype chain, it should return false.": function () {
-      var canine = {
-        sound: 'bark'
-      };
-      var empty = Object.create(null);
-      var dog = Object.create(canine);
-      dog.domesticated = true;
-      var myDog = Object.create(dog);
-      myDog.name = 'Shylah';
       var isEmptyPrototype = isPrototypeOf(empty, myDog);
       eq(isEmptyPrototype, false);
     },
