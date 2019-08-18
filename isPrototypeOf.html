@@ -20,16 +20,22 @@
 
   // Function Syntax:
   function isPrototypeOf(ancestor,descendant) {
-    // If descendant and ancestor is prototype
+    // If descendant is present:
     if(arguments.length > 1){
-      var prototype = Object.getPrototypeOf(descendant);
 
-      // Base case 1: If ancestor is on prototype chain
+      try{
+        var prototype = Object.getPrototypeOf(descendant);
+      }catch(e){
+        // Base case 1: If descendant is null or undefined
+        return false;
+      }
+
+      // Base case 2: If ancestor is on prototype chain
       if (ancestor === prototype) {
         return true;
       }
 
-      // Base case 2: If search has reached end of prototype chain
+      // Base case 3: If search has reached end of prototype chain
       if (prototype === null) {
         return false;
       }
@@ -99,14 +105,15 @@
       var isObjectPrototype = isPrototypeOf(Object.prototype, []);
       eq(isObjectPrototype, true);
     },
-    "8) If ancestor is Object.prototype and descendant is null, undefined, string, number, or boolean, it should return false.": function () {
+    "8) If ancestor is Object.prototype and descendant is null or undefined it should return false.": function () {
+      var isObjectPrototypeOfNull = isPrototypeOf(Object.prototype, null);
+      eq(isObjectPrototypeOfNull, false);
+
+      var isObjectPrototypeOfUndefined = isPrototypeOf(Object.prototype, undefined);
+      eq(isObjectPrototypeOfUndefined, false);
+    },
+    "9) If ancestor is Object.prototype and descendant is string, number, or boolean, it should return false.": function () {
       fail();
-      // var isObjectPrototypeOfNull = isPrototypeOf(Object.prototype, null);
-      // eq(isObjectPrototypeOfNull, false);
-
-      // var isObjectPrototypeOfUndefined = isPrototypeOf(Object.prototype, undefined);
-      // eq(isObjectPrototypeOfUndefined, false);
-
       // var isObjectPrototypeOfString = isPrototypeOf(Object.prototype, 'string');
       // eq(isObjectPrototypeOfString, false);
 
