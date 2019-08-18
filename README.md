@@ -1,42 +1,42 @@
-Watch and Code Beasts - Creating libraries out of order
+Watch and Code Beasts - isPrototypeOf
 =======================================
 
-In the previous challenge, you wrote a librarySystem function that could handle dependencies. It worked like this:
+In AccountingJS 8 and 9, you learned about JavaScript's prototype system. This challenge builds on those videos.
 
-librarySystem('name', [], function() {
-  return 'Gordon';
-});
+Write a function, isPrototypeOf, that works just like Object.prototype.isPrototypeOf. Since your solution will be called as a function rather than a method, the way you use it will be slightly different, but the outcome should be the same.
 
-librarySystem('company', [], function() {
-  return 'Watch and Code';
-});
+Obviously, don't use Object.prototype.isPrototypeOf in your solution, but feel free to use other methods on Object.prototype.
 
-librarySystem('workBlurb', ['name', 'company'], function(name, company) {
-  return name + ' works at ' + company;
-});
+var canine = {
+  bark: function() {
+    console.log('bark');
+  }
+};
 
-librarySystem('workBlurb'); // 'Gordon works at Watch and Code'
-However, the order of these function calls was very important. Specifically, you could only create the 'workBlurb' library after 'name' and 'company'.
+var dog = Object.create(canine);
+dog.fetch = function() {
+  console.log('fetch');
+};
 
-Your task is to rewrite librarySystem so that the following code works too. The only difference is that we're loading the libraries out of order (i.e. 'workBlurb' is created before its dependencies, 'name'and 'company').
+var myDog = Object.create(dog);
+var empty = Object.create(null);
 
-librarySystem('workBlurb', ['name', 'company'], function(name, company) {
-  return name + ' works at ' + company;
-});
+// These two lines are equivalent.
+dog.isPrototypeOf(myDog);  // native function returns true
+isPrototypeOf(dog, myDog); // your function does the same
 
-librarySystem('name', [], function() {
-  return 'Gordon';
-});
+// These two lines, similarly should return the same thing.
+dog.isPrototypeOf(empty);  // native function returns false
+isPrototypeOf(dog, empty); // your function does the same
 
-librarySystem('company', [], function() {
-  return 'Watch and Code';
-});
+// This should work too.
+Object.prototype.isPrototypeOf(myDog);  // native function returns true
+isPrototypeOf(Object.prototype, myDog); // your function does the same
 
-librarySystem('workBlurb'); // 'Gordon works at Watch and Code'
-Since this is starting to get complicated, you should write tests to make sure your solution fulfills all the requirements. If you want some warmup before tackling this, writing reduce on your own (as we did in Test Driven Development Part 9) is a good exercise to get you into the right mindset.
+// Also make sure that your function will work for any number of prototype links.
+isPrototypeOf(canine, myDog) // true
 
-Your tests should ensure that libraries can be created out of order. They should also ensure that all the requirements from the previous challenge are still being met.
+Post your solutions here:
+https://github.com/gordonmzhu/beasts/issues/4
 
-In addition to the new loading order feature, your solution should ensure that the callback function for each library is run only once. So for example, even if librarySystem('workBlurb') appears 100 times in your app, the 'workBlurb' callback function should only run once. You should definitely have a test for this.
-
-Since you'll have tests, use the same folder structure from the Test Driven Development series, which uses tinytest. When all your tests pass, upload the entire project to a Github repository and post a link to it here: https://github.com/gordonmzhu/beasts/issues/3.
+Make sure to write tests first!
