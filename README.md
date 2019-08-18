@@ -7,6 +7,7 @@ Write a function, isPrototypeOf, that works just like Object.prototype.isPrototy
 
 Obviously, don't use Object.prototype.isPrototypeOf in your solution, but feel free to use other methods on Object.prototype.
 
+```
 var canine = {
   bark: function() {
     console.log('bark');
@@ -35,6 +36,7 @@ isPrototypeOf(Object.prototype, myDog); // your function does the same
 
 // Also make sure that your function will work for any number of prototype links.
 isPrototypeOf(canine, myDog) // true
+```
 
 Post your solutions here:
 https://github.com/gordonmzhu/beasts/issues/4
