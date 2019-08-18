@@ -6,28 +6,28 @@
   Checks to see if an object exists in another object's prototype chain.
 
   Function signature:
-  isPrototypeOf(ancestor, descendant)
+  isPrototypeOf(object, possibleDescendant)
 
   Arguments:
-  ancestor - The object that may be a prototype.
-  descendant - The object that may be a descendant of the ancestor prototype.
+  object - An object.
+  possibleDescendant - The object whose prototype chain will be searced for object.
 
   Return value:
-  True if ancestor is part of descendant's prototype chain.
-  False ancestor is not part of descendant's prototype chain.
+  True if object is part of possibleDescendant's prototype chain.
+  False object is not part of possibleDescendant's prototype chain.
 
   */
 
   // Function Syntax:
-  function isPrototypeOf(ancestor,descendant) {
+  function isPrototypeOf(object, possibleDescendant) {
 
-    var typeOfDescendant = Object.prototype.toString.call(descendant);
+    var typeOfPossibleDescendant = Object.prototype.toString.call(possibleDescendant);
 
-    if(typeOfDescendant === "[object Object]" || typeOfDescendant === "[object Array]"){
-      var prototype = Object.getPrototypeOf(descendant);
+    if(typeOfPossibleDescendant === "[object Object]" || typeOfPossibleDescendant === "[object Array]"){
+      var prototype = Object.getPrototypeOf(possibleDescendant);
 
-      // Base case 1: If ancestor is on prototype chain
-      if (ancestor === prototype) {
+      // Base case 1: If object is on prototype chain
+      if (object === prototype) {
         return true;
       }
 
@@ -37,8 +37,8 @@
       }
 
       // Recursive case: Keep searching up prototype chain
-      var isAncestorPrototype = isPrototypeOf(ancestor, prototype);
-      return isAncestorPrototype;
+      var isObjectPrototype = isPrototypeOf(object, prototype);
+      return isObjectPrototype;
 
     }
 
@@ -46,28 +46,26 @@
   }
 
   tests({
-    "1) If no descendant, it should return false.": function () {
+    "1) If no possibleDescendant, it should return false.": function () {
       var isPrototype = isPrototypeOf(Object.prototype);
       eq(isPrototype, false)
     },
-    "2) If ancestor is the immediate prototype of descendant, it should return true.": function () {
+    "2) If object is the prototype of possibleDescendant, it should return true.": function () {
       var canine = {};
       var dog = Object.create(canine);
       var isCaninePrototype = isPrototypeOf(canine, dog);
       eq(isCaninePrototype, true);
     },
-    "3) If ancestor is not the prototype of descendant, it should return false.": function () {
+    "3) If object is not the prototype of possibleDescendant, it should return false.": function () {
       var canine = {
         sound: 'bark'
       };
-      var feline = {
-        sound: 'meow'
-      };
+      var empty = Object.create(null);
       var dog = Object.create(canine);
-      var isFelinePrototype = isPrototypeOf(feline, dog);
-      eq(isFelinePrototype, false);
+      var isDogPrototype = isPrototypeOf(dog, empty);
+      eq(isDogPrototype, false);
     },
-    "4) If ancestor is part of descendant's prototype chain, it should return true.": function () {
+    "4) If object is part of possibleDescendant's prototype chain, it should return true.": function () {
       var canine = {
         sound: 'bark'
       };
@@ -75,41 +73,37 @@
       dog.domesticated = true;
       var myDog = Object.create(dog);
       myDog.name = 'Shylah';
-
       var isCaninePrototype = isPrototypeOf(canine, myDog);
       eq(isCaninePrototype, true);
     },
-    "5) If ancestor is not part of descendant's prototype chain, it should return false.": function () {
+    "5) If object is not part of possibleDescendant's prototype chain, it should return false.": function () {
       var canine = {
         sound: 'bark'
       };
-      var feline = {
-        sound: 'meow'
-      };
+      var empty = Object.create(null);
       var dog = Object.create(canine);
       dog.domesticated = true;
       var myDog = Object.create(dog);
       myDog.name = 'Shylah';
-
-      var isFelinePrototype = isPrototypeOf(feline, myDog);
-      eq(isFelinePrototype, false);
+      var isEmptyPrototype = isPrototypeOf(empty, myDog);
+      eq(isEmptyPrototype, false);
     },
-    "6) If ancestor is Object.prototype, and descendent is object it should return true.": function () {
+    "6) If object is Object.prototype, and descendent is object it should return true.": function () {
       var isObjectPrototype = isPrototypeOf(Object.prototype, {});
       eq(isObjectPrototype, true);
     },
-    "7) If ancestor is Object.prototype, and descendent is array it should return true.": function () {
+    "7) If object is Object.prototype, and descendent is array it should return true.": function () {
       var isObjectPrototype = isPrototypeOf(Object.prototype, []);
       eq(isObjectPrototype, true);
     },
-    "8) If ancestor is Object.prototype and descendant is null or undefined it should return false.": function () {
+    "8) If object is Object.prototype and possibleDescendant is null or undefined it should return false.": function () {
       var isObjectPrototypeOfNull = isPrototypeOf(Object.prototype, null);
       eq(isObjectPrototypeOfNull, false);
 
       var isObjectPrototypeOfUndefined = isPrototypeOf(Object.prototype, undefined);
       eq(isObjectPrototypeOfUndefined, false);
     },
-    "9) If ancestor is Object.prototype and descendant is string, number, or boolean, it should return false.": function () {
+    "9) If object is Object.prototype and possibleDescendant is string, number, or boolean, it should return false.": function () {
       var isObjectPrototypeOfString = isPrototypeOf(Object.prototype, 'string');
       eq(isObjectPrototypeOfString, false);
 
